@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		canvas{
+			background: lightskyblue;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="canvas" width="400" height="400"></canvas>
+</body>
+<script>
+	var canvas = document.getElementById('canvas');
+	var context = canvas.getContext('2d');
+	context.beginPath();
+	context.lineWidth = 3;
+	context.strokeStyle = "white";
+	context.arc(200,200,150,0,Math.PI*2,true);
+	context.stroke();
+	function ball(x,y,R,r){
+		var b = 0;
+		var timer = setInterval(function(){
+			b+=1.8;
+			if (b>=360) {
+				b=360;
+				clearInterval(timer);
+			};
+			var text = parseInt(b/3.6)+"%";
+			console.log(text);
+			context.clearRect(150,120,110,120);
+			context.font = "50px sans";
+			context.fillStyle = "white";
+			context.fillText(text,150,220)
+			context.beginPath();
+			context.fillStyle = "rgb(246,95,86)";
+			context.arc(x+Math.sin(b*Math.PI/180)*R,y+Math.cos(b*Math.PI/180)*R,r,0,Math.PI*2,true);
+			context.fill();
+		},40)
+	}
+	ball(200,200,150,10);
+</script>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			margin: 0;
+		}
+		div{
+			width: 600px;
+			height: 600px;
+			margin: 100px auto;
+		}
+		canvas{
+			background:#ccc;
+		}
+	</style>
+</head>
+<body>
+<div>
+	<canvas id="canvas" width="600" height="600"></canvas>
+</div>
+</body>
+<script>
+	var canvas=document.getElementById('canvas');
+	var context=canvas.getContext("2d");
+	//创造蛇
+	function Snake(){
+		this.x=1;//蛇起始的x轴坐标
+		this.y=1;//蛇起始的y轴坐标
+		this.w=20;//蛇的初始宽度
+		this.h=20;//蛇的初始高度
+		this.speedX=20;//蛇在x轴的速度
+		this.speedY=20;//蛇在y轴的速度
+		this.type="snake";
+		this.moveR();
+	}
+	
+	//蛇默认向右移动
+	Snake.prototype.moveR=function(){
+		var that = this;
+		approve=setInterval(function(){
+			context.clearRect(that.x,that.y,20,20);
+			that.x+=that.speedX;
+			context.fillStyle="black";
+			context.fillRect(that.x,that.y,that.w,that.h);
+			if(that.x>600){
+				clearInterval(approve);
+				alert("game over");
+			}
+		},1000);
+		
+		document.onkeydown=function(e){
+			clearInterval(approve);
+			approve=setInterval(function(){
+				context.clearRect(that.x,that.y,20,20);
+				that.move(e);
+				context.fillStyle="black";
+				context.fillRect(that.x,that.y,that.w,that.h);
+				if(that.x>600||that.x<=0||that.y>600||that.y<=0){
+					clearInterval(approve);
+					alert("game over");
+				}
+			},100);
+		}
+		
+	}
+	//通过按键控制蛇的方向
+	Snake.prototype.move=function(e){
+		var that = this;
+		switch(e.keyCode){
+			case 37 ://向左
+				that.x-=that.speedX;
+			break;
+			case 38 : //向上
+				that.y-=that.speedY;
+			break;
+			case 39 : //向右
+				that.x+=that.speedX;
+			break;
+			case 40 : //向下
+				that.y+=that.speedY;
+			break;
+			default:
+			break;
+		}
+	}
+	function randFn(max,min){
+		return parseInt(Math.random()*(max-min+1)+min);
+	}
+	//创造食物
+	function Food(){
+		this.foodX=randFn(1,29)*20+1;
+		this.foodY=randFn(1,29)*20+1;
+		this.type="food";
+		this.w=20;
+		this.h=20;
+		this.draw();
+	}
+	Food.prototype.draw=function(){
+		context.fillStyle="red";
+		context.fillRect(this.foodX,this.foodY,this.w,this.h);
+	}
+	var snake=new Snake();
+	var arr=[];
+	arr.push(snake);
+	var food=new Food();
+</script>
+</html>
